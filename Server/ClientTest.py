@@ -49,8 +49,7 @@ score_update = {
         "type": "SCORE_UPDATE",
         "payload": {"score1": team1Score, "score2": team2Score}
 }
-sock.sendall(json.dumps(score_update).encode("utf-8"))
- 
+
 while game_time >= 0:
         if game_time == 0:
                 # Send the final score update to the server
@@ -74,17 +73,16 @@ while game_time >= 0:
         # Update the game time in the response JSON
         response["payload"]["timer"] = game_time
         
-        # Send the updated response to the server
-        sock.sendall(json.dumps(response).encode("utf-8"))
-        
         # Update the score in the response JSON
         score_update["payload"]["score1"] = team1Score
         score_update["payload"]["score2"] = team2Score
 
-        # Send the updated score_update to the server
-        sock.sendall(json.dumps(score_update).encode("utf-8"))
+        # Combine response and score_update into a single JSON
+        combined_json = {"time_update": response, "score_update": score_update}
+
+        # Send the combined JSON to the server
+        sock.sendall(json.dumps(combined_json).encode("utf-8"))
         
-        #print(game_time)
         time.sleep(1)
         game_time -= 1
 

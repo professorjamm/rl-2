@@ -7,8 +7,6 @@ PORT = 1234
 isReady = False
 
 def networkStuff(sock, json_data):
-    # Remove the socket creation, binding, and listening from here
-
     cs, addr = sock.accept()
 
     # Send the JSON data to the client side
