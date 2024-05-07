@@ -1,10 +1,12 @@
 import socket
 import json
+from backupTag import runTrakcer
 
 HOST = 'localhost'
 PORT = 1234
 
 isReady = False
+runBackTracking = False
 
 def networkStuff(sock, json_data):
     cs, addr = sock.accept()
@@ -30,8 +32,18 @@ def networkStuff(sock, json_data):
                 response = json.loads(decoded_data)
             except json.decoder.JSONDecodeError:
                 print("Game Finished (no more info to decode)")
+                runBackTracking = True
                 break
             print(decoded_data)
+            runBackTracking = True
+    
+    if runBackTracking:
+        didItRun = runTrakcer()
+        if didItRun:
+            print("Backtracking completed")
+        else:
+            print("Backtracking failed")
+            
 
 def main():
     # Create the socket here
