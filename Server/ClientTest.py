@@ -92,7 +92,7 @@ while game_time >= 0:
         time.sleep(1)
         game_time -= 1
 
-print("\n\n")
+print("\n")
 print("FINAL SCORE: Team 1: ", team1Score, " Team 2: ", team2Score) 
 # Close the socket
 sock.close()
