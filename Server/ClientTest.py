@@ -7,7 +7,11 @@ PORT = 1234
 
 # Create a socket object
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((HOST, PORT))
+#sock.connect((HOST, PORT))
+server_address = (HOST,PORT)
+sock.bind(server_address)
+sock.listen(5)
+cs, addr = sock.accept()
 
 def keyPressed():
         print("Key Pressed")
@@ -71,7 +75,8 @@ while game_time >= 0:
                 team2Score += 1
         
         # Update the game time in the response JSON
-        response["payload"]["timer"] = game_time
+        response["type"] = "TIMER_UPDATE"
+        response["payload"] = game_time
         
         # Update the score in the response JSON
         score_update["payload"]["score1"] = team1Score
@@ -79,9 +84,10 @@ while game_time >= 0:
 
         # Combine response and score_update into a single JSON
         combined_json = {"time_update": response, "score_update": score_update}
-
+        
         # Send the combined JSON to the server
-        sock.sendall(json.dumps(combined_json).encode("utf-8"))
+        sock.sendall(json.dumps(score_update).encode("utf-8"))
+        sock.sendall(json.dumps(response).encode("utf-8"))
         
         time.sleep(1)
         game_time -= 1
